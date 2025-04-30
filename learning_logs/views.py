@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from .models import Topic
+from .forms import TopicForm
 
 def index(request):
     """ Главная страница приложения """
@@ -18,3 +19,19 @@ def topic(request, topic_id):
     entries = topic.entry_set.order_by('-data_added')
     context = {'topic': topic, 'entries': entries}
     return render(request, 'learning_logs/topic.html', context)
+
+def new_topic(request):
+    """ Добовляет новую тему """
+    if request.method != 'POST':
+        # Данные не отправились, а создаётся пустая форма
+        form = TopicForm()
+    else:
+        #Отправленны данные POST, ещё проверить введённые данные
+        form = TopicForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('learning_logs:topics')
+
+    #Вывести пустую или не действительную форму
+    context = {'form': form}
+    return render(request, 'learning_logs/new_topic.html', context) 
