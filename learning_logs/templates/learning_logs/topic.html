@@ -1,8 +1,10 @@
-{% extends 'learnind_logs/base.html' %}
+{% extends 'learning_logs/base.html' %}
 
 {% block content %}
     <p>Тема: {{ topic }}</p>
     <p>Текст статьи:</p>
+    
+        
     <ul>
         {% for entry in entries %}
             <li>
@@ -15,7 +17,10 @@
             </li>
         {% endfor %}
     </ul>
-
+    
+    <p>
+        <a href="{% url 'learning_logs:new_entry' topic.id %}">Запись новой статьи</a>
+    </p>
 
 
 {% endblock content %}
